@@ -76,10 +76,10 @@ static func parse_only_courses_metadata(text: String) -> Dictionary:
 	for line in text_lines:
 		if line.is_empty() or line.begins_with("//") or not (
 			line.begins_with("COURSE")
-			and line.begins_with("LEVEL")
-			and line.begins_with("BALLOON")
-			and line.begins_with("SCOREINIT")
-			and line.begins_with("SCOREDIFF")
+			or line.begins_with("LEVEL")
+			or line.begins_with("BALLOON")
+			or line.begins_with("SCOREINIT")
+			or line.begins_with("SCOREDIFF")
 		):
 			continue
 		
@@ -120,7 +120,7 @@ static func parse_courses(text: String) -> Array:
 		var gogo = false
 		var last_gogo = false
 		var measure = 4
-		var ms = tja_metadata["offset"]
+		var ms = float(tja_metadata["offset"])
 		var barline: bool = false
 		var branches: Array = []
 		var measures: Array[Dictionary] = []
@@ -129,7 +129,7 @@ static func parse_courses(text: String) -> Array:
 		var current_lyric: String = ""
 		var section_begin: bool = true
 		var last_drumroll: Dictionary = {}
-		var balloons: Array = tja_metadata["balloon"]
+		var balloons: Array = tja_metadata["balloon"] if "balloon" in tja_metadata else []
 		var balloon_id: int = 0
 		var first_note: bool = true
 		var circle_id: int = 0
@@ -289,10 +289,7 @@ static func parse_courses(text: String) -> Array:
 						"start": note["start"],
 						"text": note["lyrics_line"]
 					})
-				
-				
-		if not events.has(course):
-			events[course] = []
+		
 		
 		var measure_ended: bool = false
 		
